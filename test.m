@@ -25,8 +25,8 @@ for i = 1:length(folder_dir)-2
     for j = 1:length(img_dir)        
         img = imread([img_path,folder_dir(i+2).name,'/',img_dir(j).name]);
         feat((i-1)*img_per_class+j,:) = feature_extraction(img);
-        
-        predict_label = your_kNN(feature_extraction(img));
+        disp(i);
+%         predict_label = your_kNN(feature_extraction(img));
 %         disp(predict_label);
     end
     

@@ -20,7 +20,8 @@ for featureIdx=1:size(feat_train,1)
 end
 
 sortedDistances = sortrows(distances,1);
-predict_label = mode(sortedDistances(K,:),2);
-
+% disp('--Closest K--');
+% disp(sortedDistances(1:K,2));
+predict_label = mode(sortedDistances(1:K,2),1);
 
 end
