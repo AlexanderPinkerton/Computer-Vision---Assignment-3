@@ -2,7 +2,7 @@ function feat = feature_extraction(img)
 % Output should be a fixed length vector [1*dimension] for a single image.
 % Please do NOT change the interface.
 
-load('clusterCenters1000.mat', 'Centers');
+load('clusterCenters180.mat', 'Centers');
 
 feat = zeros(1,size(Centers,1));
 
@@ -30,7 +30,6 @@ for i=1:size(features,1)
         
     end
     
-    %TODO: If closest center is 0, dont add.
     feat(closestCenterIdx) = feat(closestCenterIdx) + 1;
     min = Inf;
     

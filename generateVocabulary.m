@@ -49,7 +49,7 @@ load('featurespace.mat', 'allFeatures');
 
 
 
-wordCount = 5000;
+wordCount = 150;
 
 % 
 % pool = parpool;                      % Invokes workers
@@ -62,7 +62,7 @@ wordCount = 5000;
 % toc % Terminate stopwatch timer
 
 [idicies, Centers] = kmeans(allFeatures, wordCount);
-disp(Centers);
+% disp(Centers);
 
 
 

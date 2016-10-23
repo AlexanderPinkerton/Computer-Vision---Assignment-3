@@ -13,6 +13,9 @@ folder_dir = dir(img_path);
 feat = zeros(img_num,feat_dim);
 label = zeros(img_num,1);
 
+disp('Generating validation set');
+
+
 for i = 1:length(folder_dir)-2
     
     img_dir = dir([img_path,folder_dir(i+2).name,'/*.JPG']);
@@ -22,10 +25,10 @@ for i = 1:length(folder_dir)-2
     
     label((i-1)*img_per_class+1:i*img_per_class) = i;
     
-    for j = 1:length(img_dir)        
+    for j = 1:length(img_dir)     
         img = imread([img_path,folder_dir(i+2).name,'/',img_dir(j).name]);
         feat((i-1)*img_per_class+j,:) = feature_extraction(img);
-        disp(i);
+%         disp(i);
 %         predict_label = your_kNN(feature_extraction(img));
 %         disp(predict_label);
     end
