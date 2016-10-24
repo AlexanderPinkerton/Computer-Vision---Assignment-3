@@ -14,7 +14,11 @@ folder_dir = dir(img_path);
 feat_train = zeros(img_num,feat_dim);
 label_train = zeros(img_num,1);
 
+%Create table for word/document frequency for tf-idf
+wordFreqTable = zeros(feat_dim, 1);
+
 %For each label
+disp('Generating Training Data');
 for i = 1:length(folder_dir)-2
     
     img_dir = dir([img_path,folder_dir(i+2).name,'/*.JPG']);
@@ -28,9 +32,31 @@ for i = 1:length(folder_dir)-2
     for j = 1:length(img_dir)       
         img = imread([img_path,folder_dir(i+2).name,'/',img_dir(j).name]);
         feat_train((i-1)*img_per_class+j,:) = feature_extraction(img);
-        disp(j);
+        
+        %Generate the tf-idf table
+        for word=1:feat_dim
+            %Accumulate word in tf-idf table
+            if feat_train((i-1)*img_per_class+j,word) ~= 0
+                wordFreqTable(word,1) = wordFreqTable(word,1) + 1;
+            end
+        end
+        
     end
     
 end
 
+%Apply tf-idf weighting
+disp('Applying tf-idf');
+for imgIndex=1:size(feat_train,1)
+    tf = feat_train(imgIndex,:) ./ sum(feat_train(imgIndex,:));
+    idf = log(wordFreqTable' .^-1 * img_num);
+    tfidf = tf .* idf;
+    feat_train(imgIndex,:) = tfidf;
+end
+
+
+% disp(wordFreqTable);
+
 save('model.mat','feat_train','label_train');
+
+disp('done');

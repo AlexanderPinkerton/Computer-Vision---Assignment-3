@@ -2,7 +2,7 @@ function predict_label = your_kNN(feat)
 % Output should be a fixed length vector [num of img, 1].
 % Please do NOT change the interface.
 
-load('model180.mat');
+load('model.mat');
 
 K = 8;
 

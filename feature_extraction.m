@@ -15,8 +15,10 @@ points = detectSURFFeatures(gray);
 min = Inf;
 closestCenterIdx = 0;
 
+imageFeatureCount = size(features,1);
+
 %For each feature, find which cluster it belongs to and accumulate
-for i=1:size(features,1)
+for i=1:imageFeatureCount
     for j=1:size(Centers,1)
         
         %Find distance from feature to word
