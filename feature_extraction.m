@@ -24,6 +24,7 @@ for i=1:imageFeatureCount
         %Find distance from feature to word
         diff = features(i) - Centers(j);
         dist = sqrt(diff * diff');
+%         dist = dot(features(i), Centers(j)) / (norm(features(i)) * norm(Centers(j)));
         
         if dist < min
             min = dist;

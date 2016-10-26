@@ -1,5 +1,5 @@
 % Please do NOT change any thing in this script.
-% I will use my own script for grading. 
+% I will use my own script for grading.
 % It will be exactly the same as this one but with different testing image.
 clear; clc; close all;
 
@@ -18,6 +18,7 @@ disp('Generating validation set');
 %Create table for word/document frequency for tf-idf
 wordFreqTable = zeros(feat_dim, 1);
 
+useTDIF = false;
 
 for i = 1:length(folder_dir)-2
     
@@ -28,7 +29,7 @@ for i = 1:length(folder_dir)-2
     
     label((i-1)*img_per_class+1:i*img_per_class) = i;
     
-    for j = 1:length(img_dir)     
+    for j = 1:length(img_dir)
         img = imread([img_path,folder_dir(i+2).name,'/',img_dir(j).name]);
         feat((i-1)*img_per_class+j,:) = feature_extraction(img);
         
@@ -44,15 +45,16 @@ for i = 1:length(folder_dir)-2
     
 end
 
-%Apply tf-idf weighting
-disp('Applying tf-idf');
-for imgIndex=1:size(feat,1)
-    tf = feat(imgIndex,:) ./ sum(feat(imgIndex,:));
-    idf = log(wordFreqTable' .^-1 * img_num);
-    tfidf = tf .* idf;
-    feat(imgIndex,:) = tfidf;
+if useTDIF
+    %Apply tf-idf weighting
+    disp('Applying tf-idf');
+    for imgIndex=1:size(feat,1)
+        tf = feat(imgIndex,:) ./ sum(feat(imgIndex,:));
+        idf = log(wordFreqTable' .^-1 * img_num);
+        tfidf = tf .* idf;
+        feat(imgIndex,:) = tfidf;
+    end
 end
-
 
 predict_label = your_kNN(feat);
 

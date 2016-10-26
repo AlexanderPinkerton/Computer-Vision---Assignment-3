@@ -17,6 +17,8 @@ label_train = zeros(img_num,1);
 %Create table for word/document frequency for tf-idf
 wordFreqTable = zeros(feat_dim, 1);
 
+useTDIF = false;
+
 %For each label
 disp('Generating Training Data');
 for i = 1:length(folder_dir)-2
@@ -29,13 +31,13 @@ for i = 1:length(folder_dir)-2
     label_train((i-1)*img_per_class+1:i*img_per_class) = i;
     
     %For each image of the same label.
-    for j = 1:length(img_dir)       
+    for j = 1:length(img_dir)
         img = imread([img_path,folder_dir(i+2).name,'/',img_dir(j).name]);
         feat_train((i-1)*img_per_class+j,:) = feature_extraction(img);
         
         %Generate the tf-idf table
         for word=1:feat_dim
-            %Accumulate word in tf-idf table
+            %Accumulate word in tf-idf table if it is in image
             if feat_train((i-1)*img_per_class+j,word) ~= 0
                 wordFreqTable(word,1) = wordFreqTable(word,1) + 1;
             end
@@ -45,13 +47,27 @@ for i = 1:length(folder_dir)-2
     
 end
 
-%Apply tf-idf weighting
-disp('Applying tf-idf');
-for imgIndex=1:size(feat_train,1)
-    tf = feat_train(imgIndex,:) ./ sum(feat_train(imgIndex,:));
-    idf = log(wordFreqTable' .^-1 * img_num);
-    tfidf = tf .* idf;
-    feat_train(imgIndex,:) = tfidf;
+if useTDIF
+    %Apply tf-idf weighting
+    disp('Applying tf-idf');
+    for imgIndex=1:size(feat_train,1)
+        tf = feat_train(imgIndex,:) ./ sum(feat_train(imgIndex,:));
+        idf = log(wordFreqTable' .^-1 * img_num);
+        tfidf = tf .* idf;
+        
+        %     disp('normal');
+        %     disp(feat_train(imgIndex,1:10));
+        %     disp('tf');
+        %     disp(tf(1,1:10));
+        %     disp('word Freq Table');
+        %     disp(wordFreqTable(1:10,1)');
+        %     disp('idf');
+        %     disp(idf(1,1:10));
+        %     disp('tf-idf');
+        %     disp(tfidf(1,1:10));
+        
+        feat_train(imgIndex,:) = tfidf;
+    end
 end
 
 

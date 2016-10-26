@@ -5,14 +5,14 @@
 % img_per_class = 60;
 % img_num = class_num .* img_per_class;
 % %Set the feature dim to be the number of SIFT/SURF features returned.
-% feat_dim = 64;
+% feat_dim = 128;
 % 
 % 
 % folder_dir = dir(img_path);
 % feat_train = zeros(img_num,feat_dim);
 % label_train = zeros(img_num,1);
 % 
-% allFeatures = zeros(1,64);
+% allFeatures = zeros(1,feat_dim);
 % 
 % %For each label
 % for i = 1:length(folder_dir)-2
@@ -30,7 +30,7 @@
 %         
 %         gray = rgb2gray(img);
 %         points = detectSURFFeatures(gray);
-%     	[features, valid_points] = extractFeatures(gray, points);
+%     	[features, valid_points] = extractFeatures(gray, points,'SURFsize',128);
 %         allFeatures = [allFeatures;features];
 %         disp(j);
 %         
@@ -40,30 +40,20 @@
 % 
 % allFeatures = allFeatures(2:end,:);
 % 
-% save('featurespace.mat','allFeatures');
-
-
-load('featurespace.mat', 'allFeatures');
+% save('featurespace128.mat','allFeatures');
 
 
 
+% -------------------For Clustering Feature Space-------------------
+
+load('featurespace128.mat', 'allFeatures');
 
 
-wordCount = 150;
-
-% 
-% pool = parpool;                      % Invokes workers
-% stream = RandStream('mlfg6331_64');  % Random number stream
-% options = statset('UseParallel',1,'UseSubstreams',1,...
-%     'Streams',stream);
-% tic; % Start stopwatch timer
-% [idx,C,sumd,D] = kmeans(allFeatures,wordCount,'Options',options,'MaxIter',10000,...
-%     'Display','final','Replicates',10);
-% toc % Terminate stopwatch timer
+wordCount = 180;
 
 [idicies, Centers] = kmeans(allFeatures, wordCount);
-% disp(Centers);
 
+save('clusterCenters180-128','Centers');
 
 
 
